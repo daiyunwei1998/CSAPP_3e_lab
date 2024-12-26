@@ -33,6 +33,7 @@ typedef struct list_ele {
      * @brief Pointer to the next element in the linked list.
      */
     struct list_ele *next;
+    struct list_ele *prev;
 } list_ele_t;
 
 /**
@@ -44,6 +45,8 @@ typedef struct {
      *        queue is empty.
      */
     list_ele_t *head;
+    list_ele_t *tail;
+    int size;
     /*
      * TODO: You will need to add more fields to this structure
      *       to efficiently implement q_size and q_insert_tail

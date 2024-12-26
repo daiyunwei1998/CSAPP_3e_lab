@@ -27,7 +27,7 @@ queue_t *queue_new(void) {
     if (q == NULL) {
         return NULL;
     }
-    q->head = NULL;
+    q->head = NULL; // set the head to null
     return q;
 }
 
@@ -38,6 +38,25 @@ queue_t *queue_new(void) {
 void queue_free(queue_t *q) {
     /* How about freeing the list elements and the strings? */
     /* Free queue structure */
+
+    if (q == NULL) {
+    return;
+}
+
+    
+    list_ele_t *current = q->head; // create a temporal pointer that points to the currently traversed node
+    list_ele_t *next;
+
+    while (current != NULL) {
+        // free the value at current node
+        free(current->value);
+        // save the next node's value to current
+        next = current->next;
+        // free current node
+        free(current);
+        current = next;
+    }
+
     free(q);
 }
 
@@ -54,16 +73,40 @@ void queue_free(queue_t *q) {
  * @return false if q is NULL, or memory allocation failed
  */
 bool queue_insert_head(queue_t *q, const char *s) {
-    list_ele_t *newh;
+    
     /* What should you do if the q is NULL? */
     if (q == NULL) {
         return false;
     }
+    list_ele_t *newh;
     newh = malloc(sizeof(list_ele_t));
+    if (newh == NULL) {
+        return false; // Allocation failed
+    }
+    char *news;
+    news = malloc(strlen(s)+1);
+    if (news == NULL) {
+        free(newh); // Free the node if string allocation fails
+        return false;
+    }
+
     /* Don't forget to allocate space for the string and copy it */
+    strcpy(news, s); // Copy the string
+    newh->value = news;
+
     /* What if either call to malloc returns NULL? */
     newh->next = q->head;
+    newh->prev = NULL;
+
+    if (q->head != NULL) {
+        q->head->prev = newh;
+    } else {
+        // If the queue was empty, update the tail pointer
+        q->tail = newh;
+    }
+    
     q->head = newh;
+    q->size ++;
     return true;
 }
 
@@ -82,7 +125,38 @@ bool queue_insert_head(queue_t *q, const char *s) {
 bool queue_insert_tail(queue_t *q, const char *s) {
     /* You need to write the complete code for this function */
     /* Remember: It should operate in O(1) time */
-    return false;
+       /* What should you do if the q is NULL? */
+    if (q == NULL) {
+        return false;
+    }
+    list_ele_t *newt;
+    newt = malloc(sizeof(list_ele_t));
+    if (newt == NULL) {
+        return false; // Allocation failed
+    }
+    char *news;
+    news = malloc(strlen(s)+1);
+    if (news == NULL) {
+        free(newt); // Free the node if string allocation fails
+        return false;
+    }
+
+    strcpy(news, s); // Copy the string
+    newt->value = news;
+
+    /* Don't forget to allocate space for the string and copy it */
+    /* What if either call to malloc returns NULL? */
+    newt->prev = q->tail; //point to old tail
+    if (q->tail != NULL) {
+        q->tail->next = newt;
+    } else {
+        // If the queue was empty, update the tail pointer
+        q->head = newt;
+    }
+    
+    q->tail = newt;
+    q->size++;
+    return true;
 }
 
 /**
