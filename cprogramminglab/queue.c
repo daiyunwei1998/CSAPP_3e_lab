@@ -28,6 +28,7 @@ queue_t *queue_new(void) {
         return NULL;
     }
     q->head = NULL; // set the head to null
+    q->size = 0;
     return q;
 }
 
@@ -56,7 +57,9 @@ void queue_free(queue_t *q) {
         free(current);
         current = next;
     }
-
+    q->head = NULL;
+    q->tail = NULL;
+    q->size = 0;
     free(q);
 }
 
@@ -178,7 +181,31 @@ bool queue_insert_tail(queue_t *q, const char *s) {
  */
 bool queue_remove_head(queue_t *q, char *buf, size_t bufsize) {
     /* You need to fix up this code. */
+    if (q == NULL || q->size == 0) {
+        return false;
+    }
+
+    list_ele_t *old_head = q->head;
     q->head = q->head->next;
+    
+    if (q->head != NULL) {
+        if (buf != NULL && old_head->value != NULL) {
+            strncpy(buf, old_head->value, bufsize - 1);
+            buf[bufsize - 1] = '\0';  // Ensure null termination
+        }
+        
+        free(old_head);
+
+        q->head->prev = NULL;
+        
+    }
+
+    q->size --;
+
+    if (q->head == NULL) {
+    q->tail = NULL;
+}
+
     return true;
 }
 
@@ -195,7 +222,7 @@ bool queue_remove_head(queue_t *q, char *buf, size_t bufsize) {
 size_t queue_size(queue_t *q) {
     /* You need to write the code for this function */
     /* Remember: It should operate in O(1) time */
-    return 0;
+    return q->size;
 }
 
 /**
@@ -209,4 +236,27 @@ size_t queue_size(queue_t *q) {
  */
 void queue_reverse(queue_t *q) {
     /* You need to write the code for this function */
+    if(q == NULL) {
+      return;
+    }
+  
+    list_ele_t *tmp;
+    list_ele_t *current = q->head;
+
+    if (q->head == NULL) {
+        return;
+    }
+
+
+    while (current != NULL) {
+        tmp = current->next;
+        current->next = current->prev;
+        current->prev = tmp;
+
+        current = tmp;
+    }
+
+    tmp = q->tail;
+    q->tail = q->head;
+    q->head = tmp;
 }
