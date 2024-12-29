@@ -222,7 +222,7 @@ bool queue_remove_head(queue_t *q, char *buf, size_t bufsize) {
 size_t queue_size(queue_t *q) {
     /* You need to write the code for this function */
     /* Remember: It should operate in O(1) time */
-    return q->size;
+    return (size_t) q->size;
 }
 
 /**
