@@ -149,6 +149,8 @@ bool queue_insert_tail(queue_t *q, const char *s) {
     /* Don't forget to allocate space for the string and copy it */
     /* What if either call to malloc returns NULL? */
     newt->prev = q->tail; // point to old tail
+    newt->next = NULL;
+
     if (q->tail != NULL) {
         q->tail->next = newt;
     } else {
