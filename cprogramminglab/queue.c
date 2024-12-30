@@ -194,19 +194,16 @@ bool queue_remove_head(queue_t *q, char *buf, size_t bufsize) {
         buf[bufsize - 1] = '\0'; // Ensure null termination
     }
 
-    free(old_head->value);
-    free(old_head);
+    
 
     if (q->head != NULL) {
 
         q->head->prev = NULL;
-    }
+    } else {q->tail = NULL;}
 
     q->size--;
-
-    if (q->head == NULL) {
-        q->tail = NULL;
-    }
+    free(old_head->value);
+    free(old_head);
 
     return true;
 }
