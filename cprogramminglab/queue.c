@@ -189,14 +189,15 @@ bool queue_remove_head(queue_t *q, char *buf, size_t bufsize) {
     list_ele_t *old_head = q->head;
     q->head = q->head->next;
 
-    if (q->head != NULL) {
-        if (buf != NULL && old_head->value != NULL) {
-            strncpy(buf, old_head->value, bufsize - 1);
-            buf[bufsize - 1] = '\0'; // Ensure null termination
-        }
+    if (buf != NULL && old_head->value != NULL) {
+        strncpy(buf, old_head->value, bufsize - 1);
+        buf[bufsize - 1] = '\0'; // Ensure null termination
+    }
 
-        free(old_head->value);
-        free(old_head);
+    free(old_head->value);
+    free(old_head);
+
+    if (q->head != NULL) {
 
         q->head->prev = NULL;
     }
