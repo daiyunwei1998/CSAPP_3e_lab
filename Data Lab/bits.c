@@ -207,7 +207,10 @@ int negate(int x) {
  *   Rating: 3
  */
 int isAsciiDigit(int x) {
-  return 2;
+  int match_MSB = !((x >> 4) ^ 0x3); /* get the MSBs by shifting, check pattern by using XOR */
+  int LSB = x & 0xF;
+  int smaller_than_9 = (LSB - 0x9) >> 31;
+  return smaller_than_9 & match_MSB;
 }
 /* 
  * conditional - same as x ? y : z 
