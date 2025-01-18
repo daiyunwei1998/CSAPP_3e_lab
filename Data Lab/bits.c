@@ -251,7 +251,12 @@ int isLessOrEqual(int x, int y) {
  *   Rating: 4 
  */
 int logicalNeg(int x) {
-  return 2;
+  /*
+   * If a number is non-zero, either the number itself or its 
+   * negation will have the most significant bit (MSB) set. 
+   * If it's zero, neither the number nor its negation will have the MSB set. 
+  */
+  return ~(((~x + 1) | x) >> 31) + 1;
 }
 /* howManyBits - return the minimum number of bits required to represent x in
  *             two's complement
