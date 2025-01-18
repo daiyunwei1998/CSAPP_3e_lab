@@ -180,7 +180,11 @@ int isTmax(int x) {
  *   Rating: 2
  */
 int allOddBits(int x) {
-  return 2;
+  /* doesn't care about the even bits, so we need to isolate the odd bits*/
+  int mask = 0xAAAAAAAA;
+  int masked = x & mask;
+  int check_ones = masked ^ mask;  /* make sure the odd bits follow the mask pattern*/
+  return !check_ones;
 }
 /* 
  * negate - return -x 
