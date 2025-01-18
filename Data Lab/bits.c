@@ -232,7 +232,14 @@ int conditional(int x, int y, int z) {
  *   Rating: 3
  */
 int isLessOrEqual(int x, int y) {
+  int sign_x = x >> 31;
+  int magnitude_x = x & 0x7FFFFFFF;
+  int sign_y = y >> 31;
+  int diff_sign = sign_x ^ sign_y;
 
+  int diff = x + ~y + 1;                 // Compute x - y using two's complement
+  int x_smaller_in_magnitude = !(diff >> 31); // Sign of x - y (1 if x - y < 0)
+  return (diff_sign & sign_x) | (!diff_sign & x_smaller_in_magnitude);
 }
 //4
 /* 
